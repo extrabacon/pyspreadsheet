@@ -1,0 +1,32 @@
+{
+	"meta": {
+		"title": "title",
+		"subject": "subject",
+		"author": "Nicolas",
+		"comments": "excel-writer!"
+	},
+	"sheets": {
+		"sheet1": {
+			"name": "sheet1",
+			"data": {
+				"0,0": ["hello", "world"],
+				"1,0": { "values": "super cool", "format": "my cool style" }
+			}
+		},
+		"second sheet": [
+			["hello", "world"],
+			["from sheet 2"]
+		],
+		"sheet number 3": {
+			"offset": [2, 2],
+			"values": ["hello", "world"],
+			"format": "my cool style"
+		}
+	},
+	"formats": {
+		"my cool style": {
+			"font": { "bold": true },
+			"alignment": "center"
+		}
+	}
+}
