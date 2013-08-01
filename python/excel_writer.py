@@ -1,7 +1,20 @@
-import sys, json, uuid, traceback, xlsxwriter_handlers, xlwt_handlers
+import sys, json, dateutil.parser, uuid, traceback, xlsxwriter_handlers, xlwt_handlers
+from dateutil import tz
 
 def dump_record(record_type, values):
-  print(json.dumps([record_type, values]))
+  print(json.dumps([record_type, values], default = json_extended_handler))
+
+def json_extended_handler(obj):
+  if hasattr(obj, 'isoformat'):
+    return obj.isoformat()
+  return obj
+
+# extended JSON parser for handling dates
+def json_extended_parser(dct):
+  for k, v in dct.items():
+    if k == "$date":
+      return dateutil.parser.parse(v).replace(tzinfo = None)
+  return dct
 
 class SpreadsheetWriter:
   def __init__(self, handlers):
@@ -19,12 +32,12 @@ module_name = "xlsxwriter"
 
 for line in sys.stdin:
 
-  directive = json.loads(line)
+  directive = json.loads(line, object_hook = json_extended_parser)
   cmd = directive[0]
   args = directive[1:]
 
   try:
-    if cmd == 'setup':
+    if cmd == "setup":
       module_name = args[0]
       handler_module = sys.modules[module_name + "_handlers"]
       writer = SpreadsheetWriter(handler_module)

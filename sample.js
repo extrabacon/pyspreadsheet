@@ -1,7 +1,7 @@
 var fs = require('fs'),
-	SpreadsheetWriter = require('./lib').SpreadsheetWriter;
+	pyspreadsheet = require('./lib');
 
-var writer = new SpreadsheetWriter();
+/*var writer = new SpreadsheetWriter();
 
 writer.write(require('./sample-workbook.json'));
 writer.write(require('./sample-stream.json'));
@@ -14,4 +14,9 @@ writer.save(function (err, stream) {
 
 SpreadsheetReader('test.xlsx').parse(function (args) {
 	
-})
+})*/
+
+
+pyspreadsheet.read('output.xlsx', function (err, workbook) {
+	console.log(workbook);
+});

@@ -1,16 +1,16 @@
 {
-	"name": "node-openpyxl",
+	"name": "pyspreadsheet",
 	"version": "0.0.1",
 	"main": "lib/openpyxl",
-	"description": "High performance XLS/XLSX parser based on the xlrd library from www.python-excel.org.",
+	"description": "Python-based high performance spreadsheet API for Node, for reading and writing Excel files",
 	"keywords": [
+		"spreadsheet",
 		"excel",
+		"xls",
 		"xlsx",
-		"xlsm",
-		"parse",
-		"parsing",
 		"openpyxl",
-		"python-excel"
+		"python-excel",
+		"xlsxwriter"
 	],
 	"scripts": {
 		"test": "mocha tests/tests.js",
@@ -21,16 +21,15 @@
 		"underscore": "~1.4.4"
 	},
 	"devDependencies": {
-		"async": "*",
 		"mocha": "*",
 		"chai": "*"
 	},
 	"repository": {
 		"type": "git",
-		"url": "http://github.com/extrabacon/node-openpyxl"
+		"url": "http://github.com/extrabacon/pyspreadsheet"
 	},
-	"homepage": "http://github.com/extrabacon/node-openpyxl",
-	"bugs": "http://github.com/extrabacon/node-openpyxl/issues",
+	"homepage": "http://github.com/extrabacon/pyspreadsheet",
+	"bugs": "http://github.com/extrabacon/pyspreadsheet/issues",
 	"author": {
 		"name": "Nicolas Mercier",
 		"email": "nicolas@extrabacon.net"
@@ -41,6 +40,6 @@
 		}
 	],
 	"engines": {
-		"node": ">=0.8"
+		"node": ">=0.10"
 	}
 }

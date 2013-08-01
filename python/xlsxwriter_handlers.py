@@ -4,7 +4,13 @@ from xlsxwriter.workbook import Workbook
 def create_workbook(self, options = None):
 
   self.filename = str(self.id) + ".xlsx"
-  self.workbook = Workbook(self.filename, { "constant_memory": True })
+
+  if options and "defaultDateFormat" in options:
+    default_date_format = options["defaultDateFormat"]
+  else:
+    default_date_format = "yyyy-mm-dd"
+
+  self.workbook = Workbook(self.filename, { "default_date_format": default_date_format, "constant_memory": True })
   self.dump_record("open", self.filename)
 
   if options and "properties" in options:
