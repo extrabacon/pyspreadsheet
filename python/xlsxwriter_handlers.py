@@ -94,16 +94,20 @@ def format(self, name, properties):
 
   if "fill" in properties:
     fill = properties["fill"]
-    if "pattern" in fill:
-      format.set_pattern(int(fill["pattern"]))
-    else:
+    if isinstance(fill, basestring):
       format.set_pattern(1)
-    if "color" in fill:
-      fill["backgroundColor"] = fill["color"]
-    if "backgroundColor" in fill:
-      format.set_bg_color(fill["backgroundColor"])
-    if "foregroundColor" in fill:
-      format.set_fg_color(fill["foregroundColor"])
+      format.set_bg_color(fill)
+    else:
+      if "pattern" in fill:
+        format.set_pattern(int(fill["pattern"]))
+      else:
+        format.set_pattern(1)
+      if "color" in fill:
+        fill["backgroundColor"] = fill["color"]
+      if "backgroundColor" in fill:
+        format.set_bg_color(fill["backgroundColor"])
+      if "foregroundColor" in fill:
+        format.set_fg_color(fill["foregroundColor"])
 
   if "borders" in properties:
     borders = properties["borders"]
@@ -129,7 +133,13 @@ def format(self, name, properties):
 
   self.formats[name] = format
 
-def set_sheet(self, id, settings = None):
+def activate_sheet(self, id):
+  for index, sheet in enumerate(self.workbook.worksheets()):
+    if index == id or sheet.get_name() == id:
+      self.current_sheet = sheet
+      break
+
+def set_sheet_settings(self, id, settings = None):
 
   for index, sheet in enumerate(self.workbook.worksheets()):
     if index == id or sheet.get_name() == id:

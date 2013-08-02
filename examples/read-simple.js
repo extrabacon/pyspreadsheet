@@ -1,6 +1,5 @@
 /**
- * This example demonstrates how to read a simple file
- * @type {*}
+ * This example demonstrates how to read a simple file from memory
  */
 
 var util = require('util'),
