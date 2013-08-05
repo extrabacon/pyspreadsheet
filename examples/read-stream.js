@@ -1,13 +1,12 @@
 /**
- * This example demonstrates how to read a large file as a stream, without loading everything in memory, using the
- * returned SpreadsheetReader instance. The reader triggers events as data is being received.
+ * This example demonstrates how to read a large file as a stream, without loading everything in memory.
+ * The reader triggers events as data is being received.
  */
 
-var pyspreadsheet = require('../lib'),
-	util = require('util'),
-	reader = pyspreadsheet.read('./examples/sample.xlsx');
+var SpreadsheetReader = require('../lib').SpreadsheetReader,
+	util = require('util');
 
-reader.on('open', function (workbook) {
+new SpreadsheetReader('examples/sample.xlsx').on('open', function (workbook) {
 	// file is open
 	console.log('opened ' + workbook.file);
 }).on('data', function (data) {

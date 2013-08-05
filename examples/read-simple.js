@@ -2,10 +2,10 @@
  * This example demonstrates how to read a simple file from memory
  */
 
-var util = require('util'),
-	pyspreadsheet = require('../lib');
+var SpreadsheetReader = require('../lib').SpreadsheetReader,
+	util = require('util');
 
-pyspreadsheet.read('./examples/sample.xlsx', function (err, workbook) {
+SpreadsheetReader.read('examples/sample.xlsx', function (err, workbook) {
 	if (err) throw err;
 	console.log(util.inspect(workbook, { depth: null, colors: true }));
 });
