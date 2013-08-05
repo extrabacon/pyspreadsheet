@@ -2,7 +2,7 @@
 	"name": "pyspreadsheet",
 	"version": "0.0.1",
 	"main": "lib/openpyxl",
-	"description": "Python-based high performance spreadsheet API for Node, for reading and writing Excel files",
+	"description": "Python-based high performance spreadsheet API for Node",
 	"keywords": [
 		"spreadsheet",
 		"excel",
@@ -13,7 +13,7 @@
 		"xlsxwriter"
 	],
 	"scripts": {
-		"test": "mocha tests/tests.js",
+		"test": "mocha tests/*.js",
 		"install": "bash install.sh"
 	},
 	"dependencies": {

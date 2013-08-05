@@ -2,7 +2,7 @@
  * This example writes a simple spreadsheet using a JSON object
  */
 
-var fs = require('fs')
+var fs = require('fs'),
 	pyspreadsheet = require('../lib');
 
 var jsonWorkbook = {
