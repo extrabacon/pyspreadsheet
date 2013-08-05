@@ -23,16 +23,16 @@ Python shell uses multiple open source libraries to perform spreadsheet operatio
 
 ## Installation
 ```bash
-npm install xlrd-parser
+npm install pyspreadsheet
 ```
 
 Python dependencies are installed automatically by downloading the latest version from their repositories. These
 dependencies are:
 
-+ [xlrd](http://github.com/python-excel/xlrd)
-+ [xlwt](http://github.com/python-excel/xlwt)
-+ [XlsxWriter](http://github.com/jmcnamara/XlsxWriter)
-+ [openpyxl](http://bitbucket.org/ericgazoni/openpyxl)
++ [xlrd](http://github.com/python-excel/xlrd), by Python Excel
++ [xlwt](http://github.com/python-excel/xlwt), also by Python Excel
++ [XlsxWriter](http://github.com/jmcnamara/XlsxWriter), by John McNamara
++ [openpyxl](http://bitbucket.org/ericgazoni/openpyxl), by Eric Gazoni
 
 ## Documentation
 

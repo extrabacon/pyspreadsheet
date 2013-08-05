@@ -24,9 +24,9 @@ describe('PythonShell', function () {
 
 			pyshell.on('error', function (err) {
 				expect(err).to.not.be.null;
-				expect(''+err).to.contain(' >> Traceback ');
+				expect(err.toString()).to.contain(' >> Traceback ');
 				expect(err).to.have.property('data');
-				expect(''+err.data).to.contain('ZeroDivisionError: integer division or modulo by zero');
+				expect(err.data.toString()).to.contain('ZeroDivisionError: integer division or modulo by zero');
 			}).on('close', function () {
 				expect(pyshell.exitCode).to.equal(1);
 				expect(pyshell.terminated).to.be.true;

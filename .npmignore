@@ -1,0 +1,6 @@
+.idea/
+deps/
+python/openpyxl/
+python/xlrd/
+python/xlsxwriter/
+python/xlwt/

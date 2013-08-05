@@ -16,7 +16,7 @@
 		"install": "bash install.sh"
 	},
 	"dependencies": {
-		"async": "~0.1.23",
+		"async": "~0.2.9",
 		"underscore": "~1.4.4"
 	},
 	"devDependencies": {

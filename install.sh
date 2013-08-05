@@ -27,5 +27,3 @@ unzip -q openpyxl.zip
 mv ericgazoni-openpyxl-* ericgazoni-openpyxl
 rm openpyxl.zip
 cp -R ericgazoni-openpyxl ../python/openpyxl
-
-rm -rf deps
