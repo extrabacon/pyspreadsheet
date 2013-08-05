@@ -56,6 +56,7 @@ SpreadsheetReader.read('input.xlsx', function (err, workbook) {
     });
   });
 });
+```
 
 #### Return value
 
@@ -167,7 +168,7 @@ An object can be passed along with the file path for additional options.
 Output sheet names without loading any data:
 
 ```javascript
-xlrd.parse('myfile.xlsx', { meta: true }, function (err, workbook) {
+SpreadsheetReader.read('myfile.xlsx', { meta: true }, function (err, workbook) {
   console.log(workbook.meta.sheets);
 });
 ```
@@ -175,7 +176,7 @@ xlrd.parse('myfile.xlsx', { meta: true }, function (err, workbook) {
 Load only the first 10 rows from the first sheet:
 
 ```javascript
-xlrd.parse('myfile.xlsx', { sheet: 0, maxRows: 10 }, function (err, workbook) {
+SpreadsheetReader.read('myfile.xlsx', { sheet: 0, maxRows: 10 }, function (err, workbook) {
   // workbook will contain only the first sheet
 });
 ```
@@ -183,7 +184,7 @@ xlrd.parse('myfile.xlsx', { sheet: 0, maxRows: 10 }, function (err, workbook) {
 Load only a sheet named "products":
 
 ```javascript
-var stream = xlrd.stream('myfile.xlsx', { sheet: 'products' });
+var reader = new SpreadsheetReader('myfile.xlsx', { sheet: 'products' });
 ```
 
 ### Writing a file
@@ -191,7 +192,7 @@ var stream = xlrd.stream('myfile.xlsx', { sheet: 'products' });
 Use the SpreadsheetWriter class to write a new file.
 
 ```javascript
-var SpreadsheetWriter = require('../lib').SpreadsheetWriter;
+var SpreadsheetWriter = require('pyspreadsheet').SpreadsheetWriter;
 var writer = new SpreadsheetWriter();
 
 // write a string at cell A1
