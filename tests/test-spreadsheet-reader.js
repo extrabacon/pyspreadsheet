@@ -1,20 +1,20 @@
 var async = require('async'),
 	expect = require('chai').expect,
-	pyspreadsheet = require('../lib'),
+	SpreadsheetReader = require('../lib/spreadsheet-reader'),
 	sampleFiles = [
 		// OO XML workbook (Excel 2003 and later)
-		'tests/sample.xlsx',
+		'tests/input/sample.xlsx',
 		// Legacy binary format (before Excel 2003)
-		'tests/sample.xls'
+		'tests/input/sample.xls'
 	];
 
-describe('pyspreadsheet', function () {
+describe('SpreadsheetReader', function () {
 
-	describe('read()', function () {
+	describe('ctor', function () {
 
 		it('should emit a single "open" event when file is ready', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file).on('open', function (workbook) {
+				new SpreadsheetReader(file).on('open', function (workbook) {
 					expect(workbook).to.be.an('object').and.have.property('file', file);
 					return next();
 				}).on('error', function (err) {
@@ -29,7 +29,7 @@ describe('pyspreadsheet', function () {
 				var events = [],
 					total = {};
 
-				pyspreadsheet.read(file).on('open', function (workbook) {
+				new SpreadsheetReader(file).on('open', function (workbook) {
 					expect(workbook).not.be.null;
 					expect(workbook.file).to.equal(file);
 					expect(workbook.meta).not.be.null;
@@ -60,11 +60,11 @@ describe('pyspreadsheet', function () {
 
 	});
 
-	describe('read(callback)', function () {
+	describe('#read()', function () {
 
 		it('should load a workbook/sheet/row/cell structure', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file, function (err, workbook) {
+				SpreadsheetReader.read(file, function (err, workbook) {
 
 					if (err) throw err;
 
@@ -107,7 +107,7 @@ describe('pyspreadsheet', function () {
 
 		it('should parse cell addresses', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file, function (err, workbook) {
+				SpreadsheetReader.read(file, function (err, workbook) {
 
 					if (err) throw err;
 
@@ -126,7 +126,7 @@ describe('pyspreadsheet', function () {
 
 		it('should parse numeric values', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file, function (err, workbook) {
+				SpreadsheetReader.read(file, function (err, workbook) {
 
 					if (err) throw err;
 
@@ -159,7 +159,7 @@ describe('pyspreadsheet', function () {
 
 		it('should parse string values', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file, function (err, workbook) {
+				SpreadsheetReader.read(file, function (err, workbook) {
 
 					if (err) throw err;
 
@@ -186,7 +186,7 @@ describe('pyspreadsheet', function () {
 
 		it('should parse date values', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file, function (err, workbook) {
+				SpreadsheetReader.read(file, function (err, workbook) {
 
 					if (err) throw err;
 
@@ -216,7 +216,7 @@ describe('pyspreadsheet', function () {
 
 		it('should parse empty cells as nulls', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file, function (err, workbook) {
+				SpreadsheetReader.read(file, function (err, workbook) {
 
 					if (err) throw err;
 
@@ -231,7 +231,7 @@ describe('pyspreadsheet', function () {
 
 		it('should parse cells with errors', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file, function (err, workbook) {
+				SpreadsheetReader.read(file, function (err, workbook) {
 
 					if (err) throw err;
 
@@ -250,7 +250,7 @@ describe('pyspreadsheet', function () {
 
 		it('should parse cells with booleans', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file, function (err, workbook) {
+				SpreadsheetReader.read(file, function (err, workbook) {
 
 					if (err) throw err;
 
@@ -267,7 +267,7 @@ describe('pyspreadsheet', function () {
 
 		it('should parse only the selected sheet by index', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file, { sheet: 0 }, function (err, workbook) {
+				SpreadsheetReader.read(file, { sheet: 0 }, function (err, workbook) {
 					if (err) throw err;
 					expect(workbook.sheets).to.have.length(1);
 					expect(workbook.sheets[0]).to.have.property('index', 0);
@@ -279,7 +279,7 @@ describe('pyspreadsheet', function () {
 
 		it('should parse only the selected sheet by name', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file, { sheet: 'Sheet1' }, function (err, workbook) {
+				SpreadsheetReader.read(file, { sheet: 'Sheet1' }, function (err, workbook) {
 					if (err) throw err;
 					expect(workbook.sheets).to.have.length(1);
 					expect(workbook.sheets[0]).to.have.property('index', 0);
@@ -291,7 +291,7 @@ describe('pyspreadsheet', function () {
 
 		it('should parse only metadata', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file, { meta: true }, function (err, workbook) {
+				SpreadsheetReader.read(file, { meta: true }, function (err, workbook) {
 					if (err) throw err;
 					expect(workbook.sheets).to.be.undefined;
 					return next();
@@ -301,7 +301,7 @@ describe('pyspreadsheet', function () {
 
 		it('should parse up to 10 rows on the first sheet', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
-				pyspreadsheet.read(file, { sheet: 0, maxRows: 10 }, function (err, workbook) {
+				SpreadsheetReader.read(file, { sheet: 0, maxRows: 10 }, function (err, workbook) {
 					if (err) throw err;
 					expect(workbook.sheets[0]).to.have.property('name', 'Sheet1');
 					expect(workbook.sheets[0].rows).to.have.length(10);
@@ -311,7 +311,7 @@ describe('pyspreadsheet', function () {
 		});
 
 		it('should fail if the file does not exist', function (done) {
-			pyspreadsheet.read('unknown.xlsx', function (err, workbook) {
+			SpreadsheetReader.read('unknown.xlsx', function (err, workbook) {
 				expect(workbook).to.not.be.ok;
 				expect(err).to.be.an.instanceof(Error).and.have.property('id', 'file_not_found');
 				return done();
@@ -319,7 +319,7 @@ describe('pyspreadsheet', function () {
 		});
 
 		it('should fail if the file is not a valid workbook', function (done) {
-			pyspreadsheet.read('package.json', function (err, workbook) {
+			SpreadsheetReader.read('package.json', function (err, workbook) {
 				expect(workbook).to.not.be.ok;
 				expect(err).to.be.an.instanceof(Error).and.have.property('id', 'open_workbook_failed');
 				return done();
