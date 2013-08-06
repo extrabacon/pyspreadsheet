@@ -78,7 +78,7 @@ describe('PythonShell', function () {
 			var pyshell = new PythonShell('tests/echo.py');
 			var count = 0, batchCount = 0, total = 500;
 
-			for (i = 0; i < total; i++) {
+			for (var i = 0; i < total; i++) {
 				pyshell.send('message', i);
 			}
 

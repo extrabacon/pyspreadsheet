@@ -10,7 +10,7 @@ Python shell uses multiple open source libraries to perform spreadsheet operatio
 
 + Faster and more memory efficient than most alternatives
 + Uses child processes for isolation and parallelization (will not leak the Node process)
-+ Can stream large files (tested with 250K+ rows)
++ Can stream large files with a stream-like API
 + Can write large files with a simple forward-only API
 + Support for both XLS and XLSX formats
 + Native integration with Javascript objects
@@ -58,7 +58,7 @@ SpreadsheetReader.read('input.xlsx', function (err, workbook) {
 });
 ```
 
-#### Return value
+#### The Workbook object
 
 The returned object is either a workbook object, or an array of workbook objects if multiple files were specified as the
 source. The workbook object contains a structure of sheets, rows and cells to represent the data.
@@ -73,7 +73,9 @@ The Workbook object contains the following members:
 
 Sheets can also be accessed by name. For example:
 ```javascript
-var sheet1 = workbook.sheets['Sheet1'];
+var sheet1 = workbook.sheets.Sheet1;
+// - or -
+var sheet2 = workbook.sheets['Sheet 2'];
 ```
 
 The Sheet object contains the following members:
@@ -133,26 +135,19 @@ reader.on('open', function (workbook) {
 
 The following events are fired from a SpreadsheetReader instance.
 
-* `open` - fires when a workbook is opened (sheets are not available at this point)
+* `open(workbook)` - fires when a workbook is opened (sheets are not available at this point)
+  * `workbook`: the current workbook object
 
-  Arguments: the workbook object
-
-* `data` - fires repeatedly as data is being read from the file
-
-  Arguments: a data object containing the following:
-
+* `data(workbook, sheet, rows)` - fires repeatedly as data is being read from the file
   * `workbook`: the current workbook object
   * `sheet`: the current sheet object
   * `rows`: the current batch of rows
 
-* `error` - fires every time an error is encountered while parsing the file, the process is stopped only if a fatal
+* `error(err)` - fires every time an error is encountered while parsing the file, the process is stopped only if a fatal
 error is encountered
+  * `err`: the error object
 
-  Arguments: the error object
-
-* `close` - fires only once, after all files and data have been read
-
-  Arguments: none
+* `close()` - fires only once, after all files and data have been read
 
 #### Options
 
@@ -189,7 +184,8 @@ var reader = new SpreadsheetReader('myfile.xlsx', { sheet: 'products' });
 
 ### Writing a file
 
-Use the SpreadsheetWriter class to write a new file.
+Use the SpreadsheetWriter class to write a new file. SpreadsheetWriter can only write new files, it cannot change an
+existing file.
 
 ```javascript
 var SpreadsheetWriter = require('pyspreadsheet').SpreadsheetWriter;

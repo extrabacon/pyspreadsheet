@@ -1,9 +1,3 @@
-# <p>Copyright (c) 2013 Nicolas Mercier</p>
-# <p>Python script using xlrd library to output JSON structures</p>
-
-# <p>Copyright (c) 2005-2012 Stephen John Machin, Lingfo Pty Ltd</p>
-# <p>Using the xlrd package, which is released under a BSD-style licence.</p>
-
 import sys, json, datetime, glob, xlrd
 from xlrd import open_workbook, cellname, xldate_as_tuple, error_text_from_code
 
