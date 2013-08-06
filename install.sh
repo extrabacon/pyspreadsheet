@@ -22,8 +22,6 @@ cp -R XlsxWriter/xlsxwriter ../python/xlsxwriter
 
 echo Downloading openpyxl dependency from Bitbucket...
 rm -rf python/openpyxl
-curl -s -L https://bitbucket.org/ericgazoni/openpyxl/get/default.zip > openpyxl.zip
-unzip -q openpyxl.zip
+curl -s -L https://bitbucket.org/ericgazoni/openpyxl/get/default.tar.gz | tar zx
 mv ericgazoni-openpyxl-* ericgazoni-openpyxl
-rm openpyxl.zip
 cp -R ericgazoni-openpyxl ../python/openpyxl
