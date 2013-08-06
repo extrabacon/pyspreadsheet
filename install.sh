@@ -2,10 +2,6 @@ rm -rf deps
 mkdir deps
 cd deps
 
-echo dateutil...
-curl -s -L https://pypi.python.org/packages/source/p/python-dateutil/python-dateutil-2.1.tar.gz#md5=1534bb15cf311f07afaa3aacba1c028b | tar zx
-cp -R python-dateutil-2.1/dateutil ../python/dateutil
-
 echo Downloading xlrd dependency from Github...
 rm -rf ../python/xlrd
 curl -s -L https://github.com/python-excel/xlrd/tarball/master | tar zx

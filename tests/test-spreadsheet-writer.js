@@ -74,7 +74,7 @@ describe('SpreadsheetWriter', function () {
 
 	describe('write(row, col)', function () {
 		it('should write to the correct cells from indexed positions', function (done) {
-			var file = 'tests/output/write1.xlsx';
+			var file = 'tests/output/write2.xlsx';
 			var writer = new SpreadsheetWriter();
 			writer.write(0, 0, 1);
 			writer.write(0, 2, 2);
@@ -86,6 +86,35 @@ describe('SpreadsheetWriter', function () {
 				expect(workbook.sheets[0].cell('C1').value).to.equal(2);
 				expect(workbook.sheets[0].cell('B2').value).to.equal(3);
 				expect(workbook.sheets[0].cell('D4').value).to.equal(4);
+				done();
+			});
+		});
+	});
+
+	describe('write()', function () {
+		it.only('should write supported data types', function (done) {
+			var file = 'tests/output/write3.xlsx';
+			var writer = new SpreadsheetWriter();
+			var number = 1934587.9812858,
+				string = '<html>some html <body>tags</body></html>',
+				date = new Date(),
+				empty = null;
+
+			writer.write(0, 0, number);
+			writer.write(0, 1, string);
+			writer.write(0, 2, date);
+			writer.write(0, 3, true);
+
+			writer.saveAndRead(file, function (err, workbook) {
+				if (err) throw err;
+				var row = workbook.sheets[0].rows[0];
+				expect(row[0].value).to.equal(number);
+				expect(row[1].value).to.equal(string);
+				expect(row[2].value.getTime()).to.equal(new Date(
+					date.getFullYear(), date.getMonth(), date.getDate(),
+					date.getHours(), date.getMinutes(), date.getSeconds()).getTime()
+				);
+				//expect(row[3].value).to.equal(true);
 				done();
 			});
 		});

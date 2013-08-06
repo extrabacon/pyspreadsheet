@@ -1,5 +1,4 @@
-import sys, json, dateutil.parser, uuid, traceback, xlsxwriter_handlers, xlwt_handlers
-from dateutil import tz
+import sys, datetime, json, uuid, traceback, xlsxwriter_handlers, xlwt_handlers
 
 def dump_record(record_type, values):
   print(json.dumps([record_type, values], default = json_extended_handler))
@@ -13,7 +12,7 @@ def json_extended_handler(obj):
 def json_extended_parser(dct):
   for k, v in dct.items():
     if k == "$date":
-      return dateutil.parser.parse(v).replace(tzinfo = None)
+      return datetime.datetime.fromtimestamp(v / 1000)
   return dct
 
 class SpreadsheetWriter:
