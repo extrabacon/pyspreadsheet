@@ -8,18 +8,18 @@ Python shell uses multiple open source libraries to perform spreadsheet operatio
 
 ## Features
 
-+ Faster and more memory efficient than most alternatives
++ Faster and more memory efficient than most JS-only alternatives
 + Uses child processes for isolation and parallelization (will not leak the Node process)
-+ Can stream large files with a stream-like API
++ Can stream large files with a Node stream-like API
 + Can write large files with a simple forward-only API
 + Support for both XLS and XLSX formats
 + Native integration with Javascript objects
 
 ## Limitations
 
-+ Requires Python 2.7+
 + Reading does not parse formats, only data
-+ XLS writing is not yet implemented
++ XLS writing is not yet implemented, only XLSX for now
++ Only the forward-only write API is available
 
 ## Installation
 ```bash
@@ -36,36 +36,22 @@ dependencies are:
 
 ## Documentation
 
-### Reading a file
+### Reading a file with the `SpreadsheetReader` class
 
-Files can be read entirely into a workbook object, containing sheets, rows and cells.
+The `SpreadsheetReader` class allows you to read spreadsheet files. It can be used as a method for reading an entire
+file into memory, or as a stream-like object for streaming the data.
 
-```javascript
-var SpreadsheetReader = require('pyspreadsheet').SpreadsheetReader;
-
-SpreadsheetReader.read('input.xlsx', function (err, workbook) {
-  // Iterate on sheets
-  workbook.sheets.forEach(function (sheet) {
-    console.log('sheet: ' + sheet.name);
-    // Iterate on rows
-    sheet.rows.forEach(function (row) {
-      // Iterate on cells
-      row.forEach(function (cell) {
-        console.log(cell.address + ': ' + cell.value);
-      });
-    });
-  });
-});
-```
-
-#### The SpreadsheetReader class
+#### Reading a file into memory
 
 If you want to read a file into memory and have the entire contents of the file in an object structure, simply use the
-`read` method.
+`read` method. There is no need to create an instance for this scenario.
 
 * `#read(path, options, callback)` - reads an entire spreadsheet file into memory
-  * `path` - the path of the file(s) to read, accepting arrays for reading multiple files
-  * `options` - the reading options (optional), see `#ctor` for details
+  * `path` - the path of the file to read, accepting arrays for reading multiple files at once
+  * `options` - the reading options (optional)
+    * `meta` - load only workbook metadata, without iterating on rows
+    * `sheet` || `sheets` - load sheet(s) selectively, either by name or by index, also accepting arrays
+    * `maxRows` - the maximum number of rows to load per sheet
   * `callback(err, workbook)` - the callback function to invoke when the operation is completed
     * `err` - the error, if any
     * `workbook` - the parsed workbook instance, will be an array if `path` was also an array
@@ -92,10 +78,53 @@ If you want to read a file into memory and have the entire contents of the file 
             * `String` - for anything else
         * `cell(address)` - a function returning the cell at a specific location (ex: B12), same as accessing the `rows` array
 
-However, if you need to open a large file, you may want to stream the file instead. The SpreadsheetReader class exposes
-a stream-like interface that will allow you to read the data progressively.
+Example of reading an entire file with `read`:
 
-First, create an instance of SpreadsheetReader using the constructor.
+```javascript
+var SpreadsheetReader = require('pyspreadsheet').SpreadsheetReader;
+
+SpreadsheetReader.read('input.xlsx', function (err, workbook) {
+  // Iterate on sheets
+  workbook.sheets.forEach(function (sheet) {
+    console.log('sheet: ' + sheet.name);
+    // Iterate on rows
+    sheet.rows.forEach(function (row) {
+      // Iterate on cells
+      row.forEach(function (cell) {
+        console.log(cell.address + ': ' + cell.value);
+      });
+    });
+  });
+});
+```
+
+#### Reading a file from the stream interface
+
+If you need to open a large file, you may want to stream the data instead to avoid loading the entire file contents into
+memory. The `SpreadsheetReader` class exposes a stream-like interface that will allow you to read the data
+progressively.
+
+Here is an example:
+
+```javascript
+var SpreadsheetReader = require('pyspreadsheet').SpreadsheetReader;
+var reader = new SpreadsheetReader('examples/sample.xlsx');
+
+reader.on('open', function (workbook) {
+	// file is open
+	console.log('opened ' + workbook.file);
+}).on('data', function (data) {
+	// data is being received
+	console.log('buffer contains %d rows from sheet "%s"', data.rows.length, data.sheet.name);
+}).on('close', function () {
+	// file is now closed
+	console.log('file closed');
+}).on('error', function (err) {
+	throw err;
+});
+```
+
+First, create an instance of `SpreadsheetReader` using the constructor.
 
 * `#ctor(path, options)` - creates a new instance of SpreadsheetReader
   * `path` - the path of the file(s) to read, accepting arrays for reading multiple files
@@ -104,7 +133,8 @@ First, create an instance of SpreadsheetReader using the constructor.
     * `sheet` || `sheets` - load sheet(s) selectively, either by name or by index, also accepting arrays
     * `maxRows` - the maximum number of rows to load per sheet
 
-The constructor will open the file immediately for reading, so make sure you listen to the appropriate events.
+The constructor will open the file immediately for reading, so make sure you listen to the appropriate events. The
+events emitted by `SpreadsheetReader` are:
 
 * `open(workbook)` - fires when a workbook has been opened, before any iteration on sheet data
   * `workbook` - the workbook object
@@ -114,20 +144,21 @@ The constructor will open the file immediately for reading, so make sure you lis
       * `sheets` - an array of strings containing the name of sheets (available without any iteration)
 
 * `data(workbook, sheet, rows)` - fires repeatedly as data is being read from the file
-  * `workbook`: the current workbook object
-  * `sheet`: the current sheet object
-  * `rows`: the current batch of rows
+  * `workbook` - the current workbook object
+  * `sheet` - the current sheet object
+  * `rows` - the current batch of rows
 
 * `error(err)` - fires every time an error is encountered while parsing the file, the process is stopped only if a fatal
 error is encountered
-  * `err`: the error object
+  * `err` - the error object
 
 * `close()` - fires only once, after all files and data have been read
 
 ### Writing a file
 
-Use the SpreadsheetWriter class to write a new file. SpreadsheetWriter can only write new files, it cannot change an
-existing file.
+Use the `SpreadsheetWriter` class to write a new file. It can only write new files, it cannot change an existing file.
+
+Example:
 
 ```javascript
 var SpreadsheetWriter = require('pyspreadsheet').SpreadsheetWriter;
@@ -142,9 +173,9 @@ writer.save('examples/output.xlsx', function (err) {
 });
 ```
 
-#### SpreadsheetWriter class
+#### The `SpreadsheetWriter` class
 
-* `#ctor(options)` - creates a new instance of SpreadsheetWriter
+* `#ctor(options)` - creates a new instance of `SpreadsheetWriter`
   * `options` - the workbook options (optional)
     * `format` - the workbook format, "xlsx" for OpenOffice file or "xls" for legacy binary format
     * `defaultDateFormat` - the default number format to apply when writing a date - default : "yyyy-mm-dd"
