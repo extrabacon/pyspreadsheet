@@ -92,7 +92,7 @@ describe('SpreadsheetWriter', function () {
 	});
 
 	describe('write()', function () {
-		it.only('should write supported data types', function (done) {
+		it('should write supported data types', function (done) {
 			var file = 'tests/output/write3.xlsx';
 			var writer = new SpreadsheetWriter();
 			var number = 1934587.9812858,
