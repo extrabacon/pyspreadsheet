@@ -6,6 +6,8 @@ to read and write Excel files in both XLS and XLSX formats.
 This module interfaces with a Python shell process to stream JSON fragments through stdio using a child process. The
 Python shell uses multiple open source libraries to perform spreadsheet operations.
 
+IMPORTANT: PySpreadsheet is a work in progress. This is not a stable release.
+
 ## Features
 
 + Faster and more memory efficient than most JS-only alternatives

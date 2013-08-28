@@ -84,7 +84,7 @@ describe('SpreadsheetReader', function () {
 						//expect(sheet).to.equal(workbook.sheets[index]).and.to.equal(workbook.sheets[sheet.name]);
 
 						if (index === 0) {
-							expect(sheet.bounds).to.have.property('columns', 8);
+							expect(sheet.bounds).to.have.property('columns', 26);
 							expect(sheet.bounds).to.have.property('rows', 51);
 						} else if (index === 1) {
 							expect(sheet.bounds).to.have.property('columns', 3);

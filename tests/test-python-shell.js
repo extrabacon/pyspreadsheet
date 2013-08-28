@@ -72,27 +72,6 @@ describe('PythonShell', function () {
 				done();
 			}).end();
 		});
-
-		it('should send and receive messages in batches', function (done) {
-
-			var pyshell = new PythonShell('tests/echo.py');
-			var count = 0, batchCount = 0, total = 500;
-
-			for (var i = 0; i < total; i++) {
-				pyshell.send('message', i);
-			}
-
-			pyshell.on('message', function (command, index) {
-				expect(index).to.equal(count);
-				count++;
-			}).on('batchCompleted', function () {
-				batchCount++;
-			}).on('close', function () {
-				expect(count).to.equal(total);
-				expect(batchCount).to.be.above(1);
-				done();
-			}).end();
-		});
-	})
+	});
 
 });
