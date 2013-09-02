@@ -4,3 +4,5 @@ python/openpyxl/
 python/xlrd/
 python/xlsxwriter/
 python/xlwt/
+examples/output*
+tests/output*
