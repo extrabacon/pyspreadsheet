@@ -1,0 +1,11 @@
+.idea
+npm-debug.log
+node_modules
+deps
+examples/output*
+tests/output*
+python/dateutil
+python/openpyxl
+python/xlrd
+python/xlsxwriter
+python/xlwt
