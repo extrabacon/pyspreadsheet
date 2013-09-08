@@ -3,9 +3,9 @@ var async = require('async'),
 	SpreadsheetReader = require('../lib/spreadsheet-reader'),
 	sampleFiles = [
 		// OO XML workbook (Excel 2003 and later)
-		'tests/input/sample.xlsx',
+		'test/input/sample.xlsx',
 		// Legacy binary format (before Excel 2003)
-		'tests/input/sample.xls'
+		'test/input/sample.xls'
 	];
 
 describe('SpreadsheetReader', function () {

@@ -20,7 +20,7 @@ describe('PythonShell', function () {
 
 		it('should emit error on failure', function (done) {
 
-			var pyshell = new PythonShell('tests/error.py');
+			var pyshell = new PythonShell('test/error.py');
 
 			pyshell.on('error', function (err) {
 				expect(err).to.not.be.null;
@@ -39,7 +39,7 @@ describe('PythonShell', function () {
 	describe('send', function () {
 		it('should send and receive JSON messages in the same order', function (done) {
 
-			var pyshell = new PythonShell('tests/echo.py');
+			var pyshell = new PythonShell('test/echo.py');
 			var count = 0;
 
 			pyshell.send('command1');

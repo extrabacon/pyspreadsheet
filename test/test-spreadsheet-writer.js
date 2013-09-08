@@ -24,7 +24,7 @@ describe('SpreadsheetWriter', function () {
 
 	describe('addSheet()', function () {
 		it('should write a simple file with multiple sheets', function (done) {
-			var file = 'tests/output/multiple_sheets.xlsx';
+			var file = 'test/output/multiple_sheets.xlsx';
 			var writer = new SpreadsheetWriter();
 			writer.addSheet('first');
 			writer.addSheet('second');
@@ -41,7 +41,7 @@ describe('SpreadsheetWriter', function () {
 
 	describe('addFormat()', function (done) {
 		it('should write with a simple format', function (done) {
-			var file = 'tests/output/simple_format.xlsx';
+			var file = 'test/output/simple_format.xlsx';
 			var writer = new SpreadsheetWriter();
 			writer.addFormat('my format', { font: { bold: true, color: 'red' } });
 			writer.write(0, 0, 'Hello World!', 'my format');
@@ -55,7 +55,7 @@ describe('SpreadsheetWriter', function () {
 
 	describe('write(cell)', function () {
 		it('should write to the correct cell from its address', function (done) {
-			var file = 'tests/output/write1.xlsx';
+			var file = 'test/output/write1.xlsx';
 			var writer = new SpreadsheetWriter();
 			writer.write('A1', 1);
 			writer.write('C1', 2);
@@ -74,7 +74,7 @@ describe('SpreadsheetWriter', function () {
 
 	describe('write(row, col)', function () {
 		it('should write to the correct cells from indexed positions', function (done) {
-			var file = 'tests/output/write2.xlsx';
+			var file = 'test/output/write2.xlsx';
 			var writer = new SpreadsheetWriter();
 			writer.write(0, 0, 1);
 			writer.write(0, 2, 2);
@@ -93,7 +93,7 @@ describe('SpreadsheetWriter', function () {
 
 	describe('write()', function () {
 		it('should write supported data types', function (done) {
-			var file = 'tests/output/write3.xlsx';
+			var file = 'test/output/write3.xlsx';
 			var writer = new SpreadsheetWriter();
 			var number = 1934587.9812858,
 				string = '<html>some html <body>tags</body></html>',
@@ -123,7 +123,7 @@ describe('SpreadsheetWriter', function () {
 	describe('save()', function () {
 
 		it('should save a hello world file', function (done) {
-			var file = 'tests/output/helloworld.xlsx';
+			var file = 'test/output/helloworld.xlsx';
 			var writer = new SpreadsheetWriter();
 			writer.write(0, 0, 'Hello World!');
 			writer.saveAndRead(file, function (err, workbook) {
