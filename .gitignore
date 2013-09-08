@@ -3,7 +3,7 @@ npm-debug.log
 node_modules
 deps
 examples/output*
-tests/output*
+test/output*
 python/dateutil
 python/openpyxl
 python/xlrd
