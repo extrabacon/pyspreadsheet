@@ -1,77 +1,79 @@
-var async = require('async'),
-	expect = require('chai').expect,
-	PythonShell = require('../lib/python-shell');
+var PythonShell = require('../lib/python-shell');
 
 describe('PythonShell', function () {
 
-	describe('ctor', function () {
+    var rootPath;
+    before(function () {
+        rootPath = PythonShell.rootPath;
+        PythonShell.rootPath = '.';
+    });
+    after(function () {
+        PythonShell.rootPath = rootPath;
+    });
 
-		it('should spawn a Python process', function (done) {
+    describe('#ctor', function () {
 
-			var pyshell = new PythonShell('-');
-			expect(pyshell.terminated).to.be.false;
+        it('should spawn a Python process', function (done) {
 
-			pyshell.on('close', function () {
-				expect(pyshell.exitCode).to.equal(0);
-				expect(pyshell.terminated).to.be.true;
-				done();
-			}).end();
-		});
+            var pyshell = new PythonShell('-');
+            pyshell.terminated.should.be.false;
 
-		it('should emit error on failure', function (done) {
+            pyshell.on('close', function () {
+                pyshell.exitCode.should.be.exactly(0);
+                pyshell.terminated.should.be.true;
+                done();
+            }).end();
+        });
 
-			var pyshell = new PythonShell('test/error.py');
+        it('should emit error on failure', function (done) {
 
-			pyshell.on('error', function (err) {
-				expect(err).to.not.be.null;
-				expect(err.toString()).to.contain(' >> Traceback ');
-				expect(err).to.have.property('data');
-				expect(err.data.toString()).to.contain('ZeroDivisionError: integer division or modulo by zero');
-			}).on('close', function () {
-				expect(pyshell.exitCode).to.equal(1);
-				expect(pyshell.terminated).to.be.true;
-				done();
-			});
-		});
+            var pyshell = new PythonShell('test/error.py');
 
-	});
+            pyshell.on('error', function (err) {
+                err.message.should.match(/ >> Traceback /);
+                err.should.have.property('data');
+                err.data.should.containEql('ZeroDivisionError: integer division or modulo by zero');
+            }).on('close', function () {
+                pyshell.exitCode.should.be.exactly(1);
+                pyshell.terminated.should.be.true;
+                done();
+            });
+        });
 
-	describe('send', function () {
-		it('should send and receive JSON messages in the same order', function (done) {
+    });
 
-			var pyshell = new PythonShell('test/echo.py');
-			var count = 0;
+    describe('.send(command, args)', function () {
+        it('should send and receive JSON messages in the same order', function (done) {
 
-			pyshell.send('command1');
-			pyshell.send('command2', 'string');
-			pyshell.send('command3', 1, 2, 3);
+            var pyshell = new PythonShell('test/echo.py');
+            var count = 0;
 
-			pyshell.on('message', function (command, args) {
+            pyshell.send('command1');
+            pyshell.send('command2', 'string');
+            pyshell.send('command3', 1, 2, 3);
 
-				switch (count) {
-					case 0:
-						expect(command).to.equal('command1');
-						expect(args).to.be.undefined;
-						break;
-					case 1:
-						expect(command).to.equal('command2');
-						expect(args).to.equal('string');
-						break;
-					case 2:
-						expect(command).to.equal('command3');
-						expect(args).to.have.length(3);
-						expect(args[0]).to.equal(1);
-						expect(args[1]).to.equal(2);
-						expect(args[2]).to.equal(3);
-						break;
-				}
-				count++;
-
-			}).on('close', function () {
-				expect(count).to.equal(3);
-				done();
-			}).end();
-		});
-	});
-
+            pyshell.on('message', function (command, args) {
+                switch (count) {
+                    case 0:
+                        command.should.be.exactly('command1');
+                        break;
+                    case 1:
+                        command.should.be.exactly('command2');
+                        args.should.be.exactly('string');
+                        break;
+                    case 2:
+                        command.should.be.exactly('command3');
+                        args.should.be.an.Array.and.have.lengthOf(3);
+                        args[0].should.be.exactly(1);
+                        args[1].should.be.exactly(2);
+                        args[2].should.be.exactly(3);
+                        break;
+                }
+                count++;
+            }).on('close', function () {
+                count.should.be.exactly(3);
+                done();
+            }).end();
+        });
+    });
 });
