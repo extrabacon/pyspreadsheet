@@ -1,40 +1,38 @@
 {
-	"name": "pyspreadsheet",
-	"version": "0.0.3",
-	"description": "Python-based high performance spreadsheet API for Node",
-	"keywords": [
-		"spreadsheet",
-		"excel",
-		"xls",
-		"xlsx",
-		"openpyxl",
-		"python-excel",
-		"xlsxwriter"
-	],
-	"scripts": {
-		"test": "mocha tests/*.js",
-		"install": "bash install.sh"
-	},
-	"dependencies": {
-		"async": "~0.2.9",
-		"underscore": "~1.4.4",
-    "debug": "*"
-	},
-	"devDependencies": {
-		"mocha": "*",
-		"chai": "*"
-	},
-	"repository": {
-		"type": "git",
-		"url": "http://github.com/extrabacon/pyspreadsheet"
-	},
-	"homepage": "http://github.com/extrabacon/pyspreadsheet",
-	"bugs": "http://github.com/extrabacon/pyspreadsheet/issues",
-	"author": {
-		"name": "Nicolas Mercier",
-		"email": "nicolas@extrabacon.net"
-	},
-	"engines": {
-		"node": ">=0.10"
-	}
+  "name": "pyspreadsheet",
+  "version": "0.0.4",
+  "description": "Python-based high performance spreadsheet API for Node",
+  "keywords": [
+    "spreadsheet",
+    "excel",
+    "xls",
+    "xlsx",
+    "python-excel",
+    "xlsxwriter"
+  ],
+  "scripts": {
+    "test": "mocha -r should -R spec",
+    "install": "bash install.sh"
+  },
+  "dependencies": {
+    "debug": "^0.7.4"
+  },
+  "devDependencies": {
+    "async": "^0.2.10",
+    "should": "^3.1.3",
+    "mocha": "^1.17.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/extrabacon/pyspreadsheet"
+  },
+  "homepage": "http://github.com/extrabacon/pyspreadsheet",
+  "bugs": "http://github.com/extrabacon/pyspreadsheet/issues",
+  "author": {
+    "name": "Nicolas Mercier",
+    "email": "nicolas@extrabacon.net"
+  },
+  "engines": {
+    "node": ">=0.10"
+  }
 }
