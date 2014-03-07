@@ -31,7 +31,6 @@ dependencies are:
 + [xlrd](http://github.com/python-excel/xlrd), by Python Excel
 + [xlwt](http://github.com/python-excel/xlwt), also by Python Excel
 + [XlsxWriter](http://github.com/jmcnamara/XlsxWriter), by John McNamara
-+ [openpyxl](http://bitbucket.org/ericgazoni/openpyxl), by Eric Gazoni
 
 ## Documentation
 
@@ -110,16 +109,16 @@ var SpreadsheetReader = require('pyspreadsheet').SpreadsheetReader;
 var reader = new SpreadsheetReader('examples/sample.xlsx');
 
 reader.on('open', function (workbook) {
-	// file is open
-	console.log('opened ' + workbook.file);
+  // file is open
+  console.log('opened ' + workbook.file);
 }).on('data', function (data) {
-	// data is being received
-	console.log('buffer contains %d rows from sheet "%s"', data.rows.length, data.sheet.name);
+  // data is being received
+  console.log('buffer contains %d rows from sheet "%s"', data.rows.length, data.sheet.name);
 }).on('close', function () {
-	// file is now closed
-	console.log('file closed');
+  // file is now closed
+  console.log('file closed');
 }).on('error', function (err) {
-	throw err;
+  throw err;
 });
 ```
 
@@ -167,8 +166,8 @@ var writer = new SpreadsheetWriter();
 writer.write(0, 0, 'hello world!');
 
 writer.save('examples/output.xlsx', function (err) {
-	if (err) throw err;
-	console.log('file saved!');
+  if (err) throw err;
+  console.log('file saved!');
 });
 ```
 
@@ -252,7 +251,7 @@ writer.save('examples/output.xlsx', function (err) {
 
 + Tested with Node 0.10.x
 + Tested on Mac OS X 10.8
-+ Tested on Ubuntu Linux 12.04 (requires prior installation of curl: apt-get install curl)
++ Tested on Ubuntu Linux 12.04
 + Tested on Heroku
 
 ## Dependencies
@@ -261,10 +260,8 @@ writer.save('examples/output.xlsx', function (err) {
 + [xlrd](http://www.python-excel.org/) version 0.7.4+
 + [xlwt](http://www.python-excel.org/) version 0.7.5+
 + [XlsxWriter](http://xlsxwriter.readthedocs.org/en/latest/index.html) version 0.3.6+
-+ [openpyxl](http://openpyxl.readthedocs.org/en/latest/) version 1.6.2+
-+ underscore
 + bash (installation script)
-+ curl (installation script)
++ wget or curl (installation script)
 
 ## License
 
