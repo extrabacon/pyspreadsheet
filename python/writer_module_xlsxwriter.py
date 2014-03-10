@@ -3,8 +3,6 @@ from xlsxwriter.workbook import Workbook
 
 def create_workbook(self, options = None):
 
-  self.filename = str(self.id) + ".xlsx"
-
   if options and "defaultDateFormat" in options:
     default_date_format = options["defaultDateFormat"]
   else:

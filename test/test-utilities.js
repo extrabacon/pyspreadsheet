@@ -36,6 +36,12 @@ describe('utilities', function () {
         });
     });
 
+    describe('randomString', function () {
+        it('should return a random string', function () {
+            _.randomString(8).should.have.lengthOf(8).and.match(/\w+/);
+        });
+    });
+
     describe('cellToRowCol', function () {
         it('should return row and column indexes', function () {
             _.cellToRowCol('A1').should.containDeep([0, 0]);

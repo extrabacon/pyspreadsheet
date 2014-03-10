@@ -160,12 +160,12 @@ Example:
 
 ```javascript
 var SpreadsheetWriter = require('pyspreadsheet').SpreadsheetWriter;
-var writer = new SpreadsheetWriter();
+var writer = new SpreadsheetWriter('examples/output.xlsx');
 
 // write a string at cell A1
 writer.write(0, 0, 'hello world!');
 
-writer.save('examples/output.xlsx', function (err) {
+writer.save(function (err) {
   if (err) throw err;
   console.log('file saved!');
 });
@@ -173,7 +173,8 @@ writer.save('examples/output.xlsx', function (err) {
 
 #### The `SpreadsheetWriter` class
 
-* `#ctor(options)` - creates a new instance of `SpreadsheetWriter`
+* `#ctor(path, options)` - creates a new instance of `SpreadsheetWriter`
+  * `path` - the path where to write the spreadsheet file
   * `options` - the workbook options (optional)
     * `format` - the workbook format, "xlsx" for OpenOffice file or "xls" for legacy binary format
     * `defaultDateFormat` - the default number format to apply when writing a date - default : "yyyy-mm-dd"
@@ -238,14 +239,9 @@ writer.save('examples/output.xlsx', function (err) {
   * `data` - the data to write - can be a primitive, an array for writing a row, or a 2-D array for writing multiple rows
   * `format` - the format ID or format object to use (optional)
 
-* `save(path, callback)` - saves the workbook file
-  * `path` - the path of the file to save - optional, ignore to receive the stream in the callback instead
-  * `callback(err, stream)` - the callback function to invoke when the save operation is completed
-    * `err` - the error object, if any
-    * `stream` - the output stream, present only if `path` is not specified
-
-* `destroy(callback)` - destroys this instance, releasing all resources and temporary files
-  * `callback` - the callback function to invoke when the operation is completed
+* `save(callback)` - saves the workbook file
+  * `callback(err)` - the callback function to invoke when the save operation is completed
+    * `err` - the error, if any
 
 ## Compatibility
 

@@ -1,4 +1,4 @@
-import sys, datetime, json, uuid, traceback, xlsxwriter_handlers, xlwt_handlers
+import sys, datetime, json, uuid, traceback, writer_module_xlsxwriter, writer_module_xlwt
 
 def dump_record(record_type, values):
   print(json.dumps([record_type, values], default = json_extended_handler))
@@ -16,30 +16,30 @@ def json_extended_parser(dct):
   return dct
 
 class SpreadsheetWriter:
-  def __init__(self, handlers):
-    self.id = uuid.uuid4();
-    self.filename = ""
+  def __init__(self, filename, module):
+    self.filename = filename
     self.workbook = None
     self.current_sheet = None
     self.current_cell = None
     self.formats = dict()
-    self.__dict__.update(handlers.__dict__)
+    self.__dict__.update(module.__dict__)
     self.dump_record = dump_record
 
-writer = SpreadsheetWriter(xlsxwriter_handlers)
-module_name = "xlsxwriter"
+writer = None
+module_name = ""
+filename = ""
 
 for line in sys.stdin:
-
   directive = json.loads(line, object_hook = json_extended_parser)
   cmd = directive[0]
   args = directive[1:]
 
   try:
-    if cmd == "setup":
+    if cmd == "open":
       module_name = args[0]
-      handler_module = sys.modules[module_name + "_handlers"]
-      writer = SpreadsheetWriter(handler_module)
+      filename = args[1]
+      module = sys.modules["writer_module_" + module_name]
+      writer = SpreadsheetWriter(filename, module)
     else:
       getattr(writer, cmd)(writer, *args)
   except:
@@ -48,7 +48,7 @@ for line in sys.stdin:
       "command": cmd,
       "arguments": args,
       "module": module_name,
-      "file": writer.filename,
+      "file": filename,
       "error": traceback.format_exc()
     })
 
