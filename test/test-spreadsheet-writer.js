@@ -9,7 +9,7 @@ SpreadsheetWriter.prototype.saveAndRead = function (callback) {
     });
 };
 
-describe.only('SpreadsheetWriter', function () {
+describe('SpreadsheetWriter', function () {
 
     describe('#ctor(path, options)', function () {
         it('should emit "open" event', function (done) {
