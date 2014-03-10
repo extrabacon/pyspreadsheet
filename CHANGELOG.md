@@ -1,3 +1,12 @@
+# 0.1.0
+=======
+* writing spreadsheet files no longer rely on a temporary file
+* `SpreadsheetWriter` is now an `EventEmitter` and fires `open`, `close` and `error` events
+* `SpreadsheetWriter.save` no longer accept a path argument, path is now assigned via the constructor instead
+* `SpreadsheetWriter.save` no longer return a `stream.Readable` when callback is omitted
+* `SpreadsheetWriter.destroy` has been removed, use `save` instead to close the underlying process
+* Incomplete integration of xlwt for writing native XLS files
+
 # 0.0.4
 =======
 * JSHint linting and fixes
@@ -8,7 +17,7 @@
 # 0.0.3
 =======
 * bug fixes
-* improved debugging with visionmedia/debug
+* improved debugging with [debug](visionmedia/debug)
 
 # 0.0.2
 =======
@@ -17,5 +26,5 @@
 # 0.0.1
 =======
 * initial version
-* moved from extrabacon/xlrd-parser
+* moved from [extrabacon/xlrd-parser](https://github.com/extrabacon/xlrd-parser)
 * added support for writing XLSX
