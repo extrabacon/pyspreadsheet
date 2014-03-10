@@ -11,19 +11,12 @@ SpreadsheetWriter.prototype.saveAndRead = function (callback) {
 
 describe.only('SpreadsheetWriter', function () {
 
-    describe('#ctor(options)', function () {
-        it('should only support xls and xlsx formats', function () {
-            new SpreadsheetWriter({ format: 'xls' }).save();
-            new SpreadsheetWriter({ format: 'xlsx' }).save();
-            (function () {
-                new SpreadsheetWriter({ format: 'something else' });
-            }).should.throw(Error);
-        });
+    describe('#ctor(path, options)', function () {
         it('should emit "open" event', function (done) {
-            var writer = new SpreadsheetWriter({ format: 'xls' });
+            var writer = new SpreadsheetWriter('test/output/simple.xlsx');
             writer.on('open', function () {
                 done();
-            });
+            }).save();
         });
     });
 
@@ -124,6 +117,16 @@ describe.only('SpreadsheetWriter', function () {
             writer.on('close', function () {
                 done();
             }).save();
+        });
+    });
+
+    describe('xlwt', function () {
+        it('should write a simple file with xlwt', function (done) {
+            var writer = new SpreadsheetWriter('test/output/simple.xls');
+            writer.write(0, 0, 'hello world');
+            writer.addFormat('my format', { font: { bold: true }});
+            writer.write(1, 0, 'this is bold', 'my format');
+            writer.save(done);
         });
     });
 

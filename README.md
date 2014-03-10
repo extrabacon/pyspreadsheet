@@ -17,7 +17,7 @@ IMPORTANT: PySpreadsheet is a work in progress. This is not a stable release.
 ## Limitations
 
 + Reading does not parse formats, only data
-+ XLS writing is not yet implemented, only XLSX for now
++ Basic XLS writing capabilities
 + Only the forward-only write API is available
 
 ## Installation
