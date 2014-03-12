@@ -1,3 +1,7 @@
+# 0.1.1
+=======
+* moved `python-shell` into a separate and more robust module
+
 # 0.1.0
 =======
 * writing spreadsheet files no longer rely on a temporary file

@@ -3,7 +3,7 @@
  */
 
 var SpreadsheetWriter = require('../lib').SpreadsheetWriter;
-var writer = new SpreadsheetWriter();
+var writer = new SpreadsheetWriter('examples/output.xlsx');
 
 writer.addFormat('heading', { font: { bold: true } });
 writer.write(0, 0, ['ID', 'Name', 'Age', 'Birthdate', 'Balance', 'Active?'], 'heading');
@@ -16,7 +16,7 @@ writer.append([
 
 writer.write('D5', ['Total:', '=SUM(E2:E4)'], { font: { bold: true }, alignment: 'right' });
 
-writer.save('examples/output.xlsx', function (err) {
+writer.save(function (err) {
     if (err) throw err;
     console.log('file saved');
 });

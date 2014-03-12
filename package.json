@@ -1,13 +1,14 @@
 {
   "name": "pyspreadsheet",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Python-based high performance spreadsheet API for Node",
   "keywords": [
     "spreadsheet",
     "excel",
     "xls",
     "xlsx",
-    "python-excel",
+    "xlrd",
+    "xlwt",
     "xlsxwriter"
   ],
   "scripts": {
@@ -15,7 +16,7 @@
     "install": "bash install.sh"
   },
   "dependencies": {
-    "debug": "^0.7.4"
+    "python-shell": "^0.0.2"
   },
   "devDependencies": {
     "async": "^0.2.10",
