@@ -170,3 +170,4 @@ def set_column(self, index, settings):
 
 def close(self):
   self.workbook.close()
+  self.dump_record("close")

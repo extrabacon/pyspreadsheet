@@ -1,7 +1,10 @@
 import sys, datetime, json, uuid, traceback, writer_module_xlsxwriter, writer_module_xlwt
 
-def dump_record(record_type, values):
-  print(json.dumps([record_type, values], default = json_extended_handler))
+def dump_record(record_type, values = None):
+  if values != None:
+    print(json.dumps([record_type, values], default = json_extended_handler))
+  else:
+    print(json.dumps([record_type], default = json_extended_handler))
 
 def json_extended_handler(obj):
   if hasattr(obj, 'isoformat'):
@@ -25,32 +28,43 @@ class SpreadsheetWriter:
     self.__dict__.update(module.__dict__)
     self.dump_record = dump_record
 
-writer = None
-module_name = ""
-filename = ""
+def main(cmd_args):
+  import optparse
+  usage = "\n%prog -m [module] -o [output]"
+  oparser = optparse.OptionParser(usage)
+  oparser.add_option(
+    "-m", "--module",
+    dest = "module_name",
+    action = "store",
+    default = "xlsxwriter",
+    help = "the name of the writer module to load")
+  oparser.add_option(
+    "-o", "--output",
+    dest = "output_path",
+    action = "store",
+    help = "the path of the output file to write")
+  options, args = oparser.parse_args(cmd_args)
 
-for line in sys.stdin:
-  directive = json.loads(line, object_hook = json_extended_parser)
-  cmd = directive[0]
-  args = directive[1:]
+  # load the specified module and use it to create a writer
+  module = sys.modules["writer_module_" + options.module_name]
+  writer = SpreadsheetWriter(options.output_path, module)
 
-  try:
-    if cmd == "open":
-      module_name = args[0]
-      filename = args[1]
-      module = sys.modules["writer_module_" + module_name]
-      writer = SpreadsheetWriter(filename, module)
-    else:
-      getattr(writer, cmd)(writer, *args)
-  except:
-    e0, e1 = sys.exc_info()[:2]
-    dump_record("err", {
-      "command": cmd,
-      "arguments": args,
-      "module": module_name,
-      "file": filename,
-      "error": traceback.format_exc()
-    })
+  # read JSON commands from stdin and forward them to the writer
+  for line in sys.stdin:
+    try:
+      command = json.loads(line, object_hook = json_extended_parser)
+      method_name = command[0]
+      args = command[1:]
+      getattr(writer, method_name)(writer, *args)
+    except:
+      e0, e1 = sys.exc_info()[:2]
+      dump_record("err", {
+        "method_name": method_name,
+        "args": args,
+        "traceback": traceback.format_exc()
+      })
 
-writer.close(writer)
-dump_record("close", writer.filename)
+  writer.close(writer)
+  sys.exit()
+
+main(sys.argv[1:])
