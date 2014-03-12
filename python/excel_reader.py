@@ -1,4 +1,4 @@
-import sys, json, datetime, glob, xlrd
+import sys, json, traceback, datetime, glob, xlrd
 from xlrd import open_workbook, cellname, xldate_as_tuple, error_text_from_code
 
 def dump_record(record_type, values):
@@ -17,7 +17,6 @@ def parse_cell_value(sheet, cell):
   return cell.value
 
 def dump_sheet(sheet, sheet_index, max_rows):
-
   dump_record("s", {
     "index": sheet_index,
     "name": sheet.name,
@@ -25,32 +24,19 @@ def dump_sheet(sheet, sheet_index, max_rows):
     "columns": sheet.ncols,
     "visibility": sheet.visibility
   })
-
   for rowx in range(max_rows or sheet.nrows):
     for colx in range(sheet.ncols):
-      try:
-        cell = sheet.cell(rowx, colx)
-        dump_record("c", {
-          "r": rowx,
-          "c": colx,
-          "a": cellname(rowx, colx),
-          "v": parse_cell_value(sheet, cell)
-        })
-      except:
-        e0, e1 = sys.exc_info()[:2]
-        dump_record("id", {
-          "type": "dump_sheet_failed",
-          "sheet_name": sheet.name,
-          "row": rowx,
-          "column": colx,
-          "exception": e0.__name__,
-          "details": e1.message
-        })
+      cell = sheet.cell(rowx, colx)
+      dump_record("c", {
+        "r": rowx,
+        "c": colx,
+        "a": cellname(rowx, colx),
+        "v": parse_cell_value(sheet, cell)
+      })
 
 def main(cmd_args):
-
   import optparse
-  usage = "\n%prog [options] [input-file-patterns]"
+  usage = "\n%prog [options] [file1] [file2] ..."
   oparser = optparse.OptionParser(usage)
   oparser.add_option(
     "-m", "--meta",
@@ -72,48 +58,55 @@ def main(cmd_args):
     help = "maximum number of rows to load")
   options, args = oparser.parse_args(cmd_args)
 
-  for pattern in args:
-    for file in glob.glob(pattern):
+  # loop on all input files
+  for file in args:
+    try:
+      wb = open_workbook(filename=file, on_demand=True)
+      sheet_names = wb.sheet_names()
 
-      try:
-        wb = open_workbook(filename=file, on_demand=True)
-        sheet_names = wb.sheet_names()
+      dump_record("w", {
+        "file": file,
+        "sheets": sheet_names,
+        "user": wb.user_name
+      })
 
-        dump_record("w", {
-          "file": file,
-          "sheets": sheet_names,
-          "user": wb.user_name
-        })
-
-        if options.iterate_sheets:
-          if options.sheets:
-            for sheet_to_load in options.sheets:
-              try:
-                sheet_name = sheet_to_load
-                if sheet_to_load.isdigit():
-                  sheet = wb.sheet_by_index(int(sheet_to_load))
-                  sheet_name = sheet.name
-                else:
-                  sheet = wb.sheet_by_name(sheet_to_load)
-                dump_sheet(sheet, sheet_names.index(sheet_name), options.max_rows)
-                wb.unload_sheet(sheet_name)
-              except:
-                e0, e1 = sys.exc_info()[:2]
-                dump_record("err", { "id": "load_sheet_failed", "sheet_name": sheet_name, "exception": e0.__name__, "details": e1.message })
-          else:
-            for sheet_index in range(len(sheet_names)):
-              try:
-                sheet = wb.sheet_by_index(sheet_index)
-                dump_sheet(sheet, sheet_index, options.max_rows)
-                wb.unload_sheet(sheet_index)
-              except:
-                e0, e1 = sys.exc_info()[:2]
-                dump_record("err", { "id": "load_sheet_failed", "sheet_index": sheet_index, "exception": e0.__name__, "details": e1.message })
-      except:
-        e0, e1 = sys.exc_info()[:2]
-        dump_record("err", { "id": "open_workbook_failed", "file": file, "exception": e0.__name__, "details": e1.message })
+      if options.iterate_sheets:
+        if options.sheets:
+          for sheet_to_load in options.sheets:
+            try:
+              sheet_name = sheet_to_load
+              if sheet_to_load.isdigit():
+                sheet = wb.sheet_by_index(int(sheet_to_load))
+                sheet_name = sheet.name
+              else:
+                sheet = wb.sheet_by_name(sheet_to_load)
+              dump_sheet(sheet, sheet_names.index(sheet_name), options.max_rows)
+              wb.unload_sheet(sheet_name)
+            except:
+              dump_record("err", {
+                "id": "load_sheet_failed",
+                "sheet_name": sheet_name,
+                "traceback": traceback.format_exc()
+              })
+        else:
+          for sheet_index in range(len(sheet_names)):
+            try:
+              sheet = wb.sheet_by_index(sheet_index)
+              dump_sheet(sheet, sheet_index, options.max_rows)
+              wb.unload_sheet(sheet_index)
+            except:
+              dump_record("err", {
+                "id": "load_sheet_failed",
+                "sheet_name": sheet_name,
+                "traceback": traceback.format_exc()
+              })
+    except:
+      dump_record("err", {
+        "id": "open_workbook_failed",
+        "file": file,
+        "traceback": traceback.format_exc()
+      })
 
   sys.exit()
-  return None
 
 main(sys.argv[1:])

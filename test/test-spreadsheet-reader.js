@@ -306,7 +306,8 @@ describe('SpreadsheetReader', function () {
         it('should fail if the file does not exist', function (done) {
             SpreadsheetReader.read('unknown.xlsx', function (err, workbook) {
                 if (workbook) throw new Error('workbook should be undefined');
-                err.should.be.an.Error.and.have.property('id', 'file_not_found');
+                err.should.be.an.Error.and.have.property('id', 'open_workbook_failed');
+                err.stack.should.containEql('----- Python Traceback -----');
                 return done();
             });
         });
