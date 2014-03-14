@@ -1,3 +1,8 @@
+# 0.1.2
+=======
+* fixed resolving of scripts with `python-shell`
+* extended errors with traceback support for exceptions thrown from Python code
+
 # 0.1.1
 =======
 * moved `python-shell` into a separate and more robust module
