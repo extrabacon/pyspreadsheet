@@ -1,4 +1,5 @@
-import sys, datetime, json, uuid, traceback, writer_module_xlsxwriter, writer_module_xlwt
+import sys, datetime, json, uuid, traceback
+import excel_writer_xlsxwriter, excel_writer_xlwt
 
 def dump_record(record_type, values = None):
   if values != None:
@@ -25,6 +26,7 @@ class SpreadsheetWriter:
     self.current_sheet = None
     self.current_cell = None
     self.formats = dict()
+    # inject module functions into writer instance
     self.__dict__.update(module.__dict__)
     self.dump_record = dump_record
 
@@ -46,7 +48,7 @@ def main(cmd_args):
   options, args = oparser.parse_args(cmd_args)
 
   # load the specified module and use it to create a writer
-  module = sys.modules["writer_module_" + options.module_name]
+  module = sys.modules["excel_writer_" + options.module_name]
   writer = SpreadsheetWriter(options.output_path, module)
 
   # read JSON commands from stdin and forward them to the writer
@@ -57,8 +59,7 @@ def main(cmd_args):
       args = command[1:]
       getattr(writer, method_name)(writer, *args)
     except:
-      e0, e1 = sys.exc_info()[:2]
-      dump_record("err", {
+      dump_record("error", {
         "method_name": method_name,
         "args": args,
         "traceback": traceback.format_exc()

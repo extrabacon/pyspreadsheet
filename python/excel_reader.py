@@ -27,12 +27,7 @@ def dump_sheet(sheet, sheet_index, max_rows):
   for rowx in range(max_rows or sheet.nrows):
     for colx in range(sheet.ncols):
       cell = sheet.cell(rowx, colx)
-      dump_record("c", {
-        "r": rowx,
-        "c": colx,
-        "a": cellname(rowx, colx),
-        "v": parse_cell_value(sheet, cell)
-      })
+      dump_record("c", [rowx, colx, cellname(rowx, colx), parse_cell_value(sheet, cell)])
 
 def main(cmd_args):
   import optparse
@@ -83,9 +78,10 @@ def main(cmd_args):
               dump_sheet(sheet, sheet_names.index(sheet_name), options.max_rows)
               wb.unload_sheet(sheet_name)
             except:
-              dump_record("err", {
+              dump_record("error", {
                 "id": "load_sheet_failed",
-                "sheet_name": sheet_name,
+                "file": file,
+                "sheet": sheet_name,
                 "traceback": traceback.format_exc()
               })
         else:
@@ -95,13 +91,14 @@ def main(cmd_args):
               dump_sheet(sheet, sheet_index, options.max_rows)
               wb.unload_sheet(sheet_index)
             except:
-              dump_record("err", {
+              dump_record("error", {
                 "id": "load_sheet_failed",
-                "sheet_name": sheet_name,
+                "file": file,
+                "sheet": sheet_index,
                 "traceback": traceback.format_exc()
               })
     except:
-      dump_record("err", {
+      dump_record("error", {
         "id": "open_workbook_failed",
         "file": file,
         "traceback": traceback.format_exc()
