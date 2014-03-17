@@ -1,3 +1,8 @@
+# 0.1.3
+=======
+* maintenance: simplified Python scripts, improved performance
+* vastly improved documentation
+
 # 0.1.2
 =======
 * fixed resolving of scripts with `python-shell`
