@@ -388,7 +388,7 @@ Emitted when an error occurs.
 + [xlwt](http://www.python-excel.org/) version 0.7.5+
 + [XlsxWriter](http://xlsxwriter.readthedocs.org/en/latest/index.html) version 0.3.6+
 + bash (installation script)
-+ wget or curl (installation script)
++ git (installation script)
 
 ## License
 

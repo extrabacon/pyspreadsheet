@@ -1,3 +1,7 @@
+# 0.1.4
+=======
+* installing with git instead of wget and curl
+
 # 0.1.3
 =======
 * maintenance: simplified Python scripts, improved performance
