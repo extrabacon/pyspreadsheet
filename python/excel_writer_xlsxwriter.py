@@ -131,6 +131,9 @@ def format(self, name, properties):
 
   self.formats[name] = format
 
+def merge_range(self, range, data, format_name = None):
+  self.current_sheet.merge_range(range, data, format_name)
+
 def activate_sheet(self, id):
   for index, sheet in enumerate(self.workbook.worksheets()):
     if index == id or sheet.get_name() == id:
