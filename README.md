@@ -1,5 +1,4 @@
 # PySpreadsheet
-
 A high-performance spreadsheet library for Node, powered by Python open source libraries. PySpreadsheet can be used
 to read and write Excel files in both XLS and XLSX formats.
 
@@ -165,6 +164,17 @@ writer.addFormat('title', {
 });
 
 writer.write(0, 0, ['heading 1', 'heading 2', 'heading 3'], 'title');
+```
+
+Cells can be merged by using the `merge_range` method.
+
+```js
+writer.addFormat('TestFormat', {
+  font: { bold: true, color: '#ff0000' },
+  fill: '#000000'
+});
+
+writer.merge_range('B2:E5', "merge_range Test", 'TestFormat');
 ```
 
 ## API Reference
@@ -334,6 +344,14 @@ Registers a reusable format.
     * `top` | `left` | `right` | `bottom`
       * `style`
       * `color`
+
+#### .merge_range(range, data, format)
+
+Merge cells.
+
+* `range` - merged range
+* `data` - value of merged cell
+* `format` - the format name
 
 #### .write(row, column, data, format)
 
