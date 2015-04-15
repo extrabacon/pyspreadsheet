@@ -172,6 +172,12 @@ writer.addFormat('title', {
 writer.write(0, 0, ['heading 1', 'heading 2', 'heading 3'], 'title');
 ```
 
+Set a row height
+
+```js
+writer.set_row(0,{height:100});
+```
+
 ## API Reference
 
 ### SpreadsheetReader
@@ -339,6 +345,16 @@ Registers a reusable format.
     * `top` | `left` | `right` | `bottom`
       * `style`
       * `color`
+
+#### .set_row(row, options)
+
+Set a row properties.
+
+* `row` - Row index
+* `options` - the row properties [more info](http://xlsxwriter.readthedocs.org/worksheet.html#set_row)
+  * `height`
+  * `format`
+  * `options`
 
 #### .merge_range(range, data, format)
 
