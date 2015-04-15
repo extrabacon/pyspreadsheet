@@ -167,7 +167,7 @@ def set_sheet_settings(self, id, settings = None):
         self.current_sheet.set_selection(int(selection["top"]), int(selection["left"]), int(selection["bottom"]), int(selection["right"]))
 
 def set_row(self, index, settings):
-  self.current_sheet.set_row(index, settings.get("height"), settings.get("format"), settings.get("options"))
+  self.current_sheet.set_row(index, settings.get("height", None), settings.get("format", None), settings.get("options",{}))
 
 def set_column(self, index, settings):
   self.current_sheet.set_column(index, index, settings.get("width"), settings.get("format"), settings.get("options"))
