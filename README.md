@@ -142,6 +142,12 @@ writer.write(0, 0, [
 ]);
 ```
 
+Cells can be merged by using the `merge_range` method.
+
+```js
+writer.merge_range('B2:E5', "merge_range Test");
+```
+
 ### Formatting
 
 Cells can be formatted by specifying format properties.
@@ -164,17 +170,6 @@ writer.addFormat('title', {
 });
 
 writer.write(0, 0, ['heading 1', 'heading 2', 'heading 3'], 'title');
-```
-
-Cells can be merged by using the `merge_range` method.
-
-```js
-writer.addFormat('TestFormat', {
-  font: { bold: true, color: '#ff0000' },
-  fill: '#000000'
-});
-
-writer.merge_range('B2:E5', "merge_range Test", 'TestFormat');
 ```
 
 ## API Reference
