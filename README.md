@@ -172,6 +172,18 @@ writer.addFormat('title', {
 writer.write(0, 0, ['heading 1', 'heading 2', 'heading 3'], 'title');
 ```
 
+Cell with rich content.
+
+```js
+writer.addFormat('redFormat', {
+  font: { bold: true, color: '#ff0000' },
+});
+writer.addFormat('greenFormat', {
+  font: { color: '#00ff00' },
+});
+writer.write_rich_string(0,0,'default ','redFormat',' red ','greenFormat','green');
+```
+
 Set a row height
 
 ```js
@@ -383,6 +395,14 @@ Writes data to the specified cell with an optional format.
 * `column` - the column index
 * `data` - the value to write, supported types are: String, Number, Date, Boolean and Array
 * `format` - the format name or properties to use (optional)
+
+#### .write_rich_string(row, column, parts..)
+
+Write a “rich” string with multiple formats to a worksheet cell. [more info](http://xlsxwriter.readthedocs.org/worksheet.html#write_rich_string)
+
+* `row` - the row index
+* `column` - the column index
+* `parts` - format names, and texts parts
 
 #### .write(cell, data, format)
 
