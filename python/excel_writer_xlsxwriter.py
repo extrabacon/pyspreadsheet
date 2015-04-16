@@ -73,13 +73,13 @@ def format(self, name, properties):
       format.set_italic()
     if "underline" in font:
       if font["underline"] == True or font["underline"] == "single":
-        format.set_underline = 1
+        format.set_underline(1)
       elif font["underline"] == "double":
-        format.set_underline = 2
+        format.set_underline(2)
       elif font["underline"] == "single accounting":
-        format.set_underline = 33
+        format.set_underline(33)
       elif font["underline"] == "double accounting":
-        format.set_underline = 34
+        format.set_underline(34)
     if font.get("strikeout", False):
       format.set_strikeout()
     if font.get("superscript", False):
