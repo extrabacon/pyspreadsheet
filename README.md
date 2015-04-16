@@ -337,7 +337,7 @@ Registers a reusable format.
     * `color`
     * `bold`
     * `italic`
-    * `underline`
+    * `underline` (true | 'single' | 'double' | 'single accounting' | 'double accounting')
     * `strikeout`
     * `superscript`
     * `subscript`
