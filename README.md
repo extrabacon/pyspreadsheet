@@ -348,11 +348,22 @@ Registers a reusable format.
 
 #### .set_row(row, options)
 
-Set a row properties.
+Set properties for a row of cells.
 
 * `row` - Row index
 * `options` - the row properties [more info](http://xlsxwriter.readthedocs.org/worksheet.html#set_row)
   * `height`
+  * `format`
+  * `options`
+
+#### .set_column(first_col, options)
+
+Set properties for one or more columns of cells.
+
+* `first_col` - Column index
+* `options` - the row properties [more info](http://xlsxwriter.readthedocs.org/worksheet.html#set_column)
+  * `last_col` - default first_col
+  * `width`
   * `format`
   * `options`
 
