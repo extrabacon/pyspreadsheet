@@ -36,6 +36,25 @@ def write(self, row, col, data, format_name = None):
   else:
     self.current_sheet.write(row, col, data, format)
 
+def write_rich_string(self, row, *parts):
+  newArgs = []
+  format=None
+  col = parts[0]
+
+  if not isinstance(row, basestring):
+    newArgs.append(col)
+    parts = parts[1:]
+  for part in parts:
+    if not isinstance(part, basestring):
+        newArgs.append(part)
+    elif format==None and self.formats.get(part,None)!=None:
+       format=self.formats[part]
+       newArgs.append(format)
+    else:
+        newArgs.append(part)
+        format=None
+  self.current_sheet.write_rich_string(row, *newArgs)
+
 def format(self, name, properties):
 
   format = self.workbook.add_format()
