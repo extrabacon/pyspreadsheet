@@ -170,7 +170,7 @@ def set_row(self, index, settings):
   self.current_sheet.set_row(index, settings.get("height", None), settings.get("format", None), settings.get("options",{}))
 
 def set_column(self, index, settings):
-  self.current_sheet.set_column(index, index, settings.get("width"), settings.get("format"), settings.get("options"))
+  self.current_sheet.set_column(index, settings.get("last_col",index), settings.get("width"), settings.get("format"), settings.get("options",{}))
 
 def close(self):
   self.workbook.close()
