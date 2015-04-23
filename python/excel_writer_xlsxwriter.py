@@ -46,13 +46,13 @@ def write_rich_string(self, row, *parts):
     parts = parts[1:]
   for part in parts:
     if not isinstance(part, basestring):
-        newArgs.append(part)
-    elif format==None and self.formats.get(part,None)!=None:
-       format=self.formats[part]
-       newArgs.append(format)
+      newArgs.append(part)
+    elif format==None and part in self.formats:
+      format=self.formats[part]
+      newArgs.append(format)
     else:
-        newArgs.append(part)
-        format=None
+      newArgs.append(part)
+      format=None
   self.current_sheet.write_rich_string(row, *newArgs)
 
 def format(self, name, properties):
@@ -186,7 +186,9 @@ def set_sheet_settings(self, id, settings = None):
         self.current_sheet.set_selection(int(selection["top"]), int(selection["left"]), int(selection["bottom"]), int(selection["right"]))
 
 def set_row(self, index, settings):
-  self.current_sheet.set_row(index, settings.get("height", None), settings.get("format", None), settings.get("options",{}))
+    #if settings != None:
+    #self.current_sheet.set_row(index, settings.get("height"), settings.get("format"), settings.get("options"))
+    self.current_sheet.set_row(index, settings.get("height", None), settings.get("format", None), settings.get("options",{}))
 
 def set_column(self, index, settings):
   self.current_sheet.set_column(index, settings.get("last_col",index), settings.get("width"), settings.get("format"), settings.get("options",{}))
