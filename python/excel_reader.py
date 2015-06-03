@@ -103,6 +103,9 @@ def main(cmd_args):
         "file": file,
         "traceback": traceback.format_exc()
       })
+    dump_record("x", {
+      "file": file
+    })  
 
   sys.exit()
 
