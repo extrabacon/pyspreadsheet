@@ -57,7 +57,18 @@ def main(cmd_args):
       command = json.loads(line, object_hook = json_extended_parser)
       method_name = command[0]
       args = command[1:]
-      getattr(writer, method_name)(writer, *args)
+
+      if getattr(writer, method_name, None)!=None:
+        # Try find method at writer class
+        getattr(writer, method_name)(writer, *args)
+      elif getattr(writer.current_sheet, method_name, None)!=None:
+        # try find original method at active sheet
+        getattr(writer.current_sheet, method_name)(*args)
+      else:
+        dump_record("unknown method", {
+          "method_name": method_name,
+          "args": args
+        })
     except:
       dump_record("error", {
         "method_name": method_name,
