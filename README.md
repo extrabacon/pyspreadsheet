@@ -1,5 +1,4 @@
 # PySpreadsheet
-
 A high-performance spreadsheet library for Node, powered by Python open source libraries. PySpreadsheet can be used
 to read and write Excel files in both XLS and XLSX formats.
 
@@ -143,6 +142,12 @@ writer.write(0, 0, [
 ]);
 ```
 
+Cells can be merged by using the `merge_range` method.
+
+```js
+writer.merge_range('B2:E5', "merge_range Test");
+```
+
 ### Formatting
 
 Cells can be formatted by specifying format properties.
@@ -165,6 +170,24 @@ writer.addFormat('title', {
 });
 
 writer.write(0, 0, ['heading 1', 'heading 2', 'heading 3'], 'title');
+```
+
+Cell with rich content.
+
+```js
+writer.addFormat('redFormat', {
+  font: { bold: true, color: '#ff0000' },
+});
+writer.addFormat('greenFormat', {
+  font: { color: '#00ff00' },
+});
+writer.write_rich_string(0,0,'default ','redFormat',' red ','greenFormat','green');
+```
+
+Set a row height
+
+```js
+writer.set_row(0,{height:100});
 ```
 
 ## API Reference
@@ -314,7 +337,7 @@ Registers a reusable format.
     * `color`
     * `bold`
     * `italic`
-    * `underline`
+    * `underline` (true | 'single' | 'double' | 'single accounting' | 'double accounting')
     * `strikeout`
     * `superscript`
     * `subscript`
@@ -335,6 +358,35 @@ Registers a reusable format.
       * `style`
       * `color`
 
+#### .set_row(row, options)
+
+Set properties for a row of cells.
+
+* `row` - Row index
+* `options` - the row properties [more info](http://xlsxwriter.readthedocs.org/worksheet.html#set_row)
+  * `height`
+  * `format`
+  * `options`
+
+#### .set_column(first_col, options)
+
+Set properties for one or more columns of cells.
+
+* `first_col` - Column index
+* `options` - the row properties [more info](http://xlsxwriter.readthedocs.org/worksheet.html#set_column)
+  * `last_col` - default first_col
+  * `width`
+  * `format`
+  * `options`
+
+#### .merge_range(range, data, format)
+
+Merge cells.
+
+* `range` - merged range
+* `data` - value of merged cell
+* `format` - the format name
+
 #### .write(row, column, data, format)
 
 Writes data to the specified cell with an optional format.
@@ -343,6 +395,14 @@ Writes data to the specified cell with an optional format.
 * `column` - the column index
 * `data` - the value to write, supported types are: String, Number, Date, Boolean and Array
 * `format` - the format name or properties to use (optional)
+
+#### .write_rich_string(row, column, parts..)
+
+Write a “rich” string with multiple formats to a worksheet cell. [more info](http://xlsxwriter.readthedocs.org/worksheet.html#write_rich_string)
+
+* `row` - the row index
+* `column` - the column index
+* `parts` - format names, and texts parts
 
 #### .write(cell, data, format)
 
