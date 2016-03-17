@@ -1,3 +1,7 @@
+# 0.1.6
+=======
+* fix that avoids skipping end of file when python console finishes before parsing console.
+
 # 0.1.4
 =======
 * installing with git instead of wget and curl
