@@ -1,6 +1,6 @@
-# 0.1.5
+# 0.1.6
 =======
-* fix that avoids skipping end of file when python console finishes before parsing console. 
+* fix that avoids skipping end of file when python console finishes before parsing console.
 
 # 0.1.4
 =======
