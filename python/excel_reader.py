@@ -75,7 +75,7 @@ def main(cmd_args):
                 sheet_name = sheet.name
               else:
                 sheet = wb.sheet_by_name(sheet_to_load)
-              dump_sheet(sheet, sheet_names.index(sheet_name), options.max_rows)
+              dump_sheet(sheet, sheet_names.index(sheet_name.decode('utf-8')), options.max_rows)
               wb.unload_sheet(sheet_name)
             except:
               dump_record("error", {
