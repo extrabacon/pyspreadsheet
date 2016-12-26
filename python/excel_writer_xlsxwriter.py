@@ -36,6 +36,25 @@ def write(self, row, col, data, format_name = None):
   else:
     self.current_sheet.write(row, col, data, format)
 
+def write_rich_string(self, row, *parts):
+  newArgs = []
+  format=None
+  col = parts[0]
+
+  if not isinstance(row, basestring):
+    newArgs.append(col)
+    parts = parts[1:]
+  for part in parts:
+    if not isinstance(part, basestring):
+      newArgs.append(part)
+    elif format==None and part in self.formats:
+      format=self.formats[part]
+      newArgs.append(format)
+    else:
+      newArgs.append(part)
+      format=None
+  self.current_sheet.write_rich_string(row, *newArgs)
+
 def format(self, name, properties):
 
   format = self.workbook.add_format()
@@ -54,13 +73,13 @@ def format(self, name, properties):
       format.set_italic()
     if "underline" in font:
       if font["underline"] == True or font["underline"] == "single":
-        format.set_underline = 1
+        format.set_underline(1)
       elif font["underline"] == "double":
-        format.set_underline = 2
+        format.set_underline(2)
       elif font["underline"] == "single accounting":
-        format.set_underline = 33
+        format.set_underline(33)
       elif font["underline"] == "double accounting":
-        format.set_underline = 34
+        format.set_underline(34)
     if font.get("strikeout", False):
       format.set_strikeout()
     if font.get("superscript", False):
@@ -131,6 +150,10 @@ def format(self, name, properties):
 
   self.formats[name] = format
 
+def merge_range(self, range, data, format_name = None):
+  format = self.formats[format_name] if format_name != None else None
+  self.current_sheet.merge_range(range, data, format)
+
 def activate_sheet(self, id):
   for index, sheet in enumerate(self.workbook.worksheets()):
     if index == id or sheet.get_name() == id:
@@ -163,10 +186,12 @@ def set_sheet_settings(self, id, settings = None):
         self.current_sheet.set_selection(int(selection["top"]), int(selection["left"]), int(selection["bottom"]), int(selection["right"]))
 
 def set_row(self, index, settings):
-  self.current_sheet.set_row(index, settings.get("height"), settings.get("format"), settings.get("options"))
+    #if settings != None:
+    #self.current_sheet.set_row(index, settings.get("height"), settings.get("format"), settings.get("options"))
+    self.current_sheet.set_row(index, settings.get("height", None), settings.get("format", None), settings.get("options",{}))
 
 def set_column(self, index, settings):
-  self.current_sheet.set_column(index, index, settings.get("width"), settings.get("format"), settings.get("options"))
+  self.current_sheet.set_column(index, settings.get("last_col",index), settings.get("width"), settings.get("format"), settings.get("options",{}))
 
 def close(self):
   self.workbook.close()
